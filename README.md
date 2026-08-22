@@ -7,6 +7,7 @@ Sistema web para que un **corredor de bolsa** registre los montos de dividendos 
 [![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black&style=flat)](https://react.dev/)
 [![Vite](https://img.shields.io/badge/Vite-6-646CFF?logo=vite&logoColor=white&style=flat)](https://vitejs.dev/)
 [![SQLite](https://img.shields.io/badge/SQLite-3-003B57?logo=sqlite&logoColor=white&style=flat)](https://www.sqlite.org/)
+[![Docker](https://img.shields.io/badge/Docker-29-2496ED?logo=docker&logoColor=white&style=flat)](https://www.docker.com/)
 
 ---
 
@@ -41,9 +42,23 @@ Proyecto del ramo **Proyecto Integrado** (INACAP), basado en un requerimiento re
 - Node.js 20 o superior
 - npm
 
+**O con Docker:**
+
+- Docker + Docker Compose
+
 ## Instalación
 
-### Backend
+### Con Docker (recomendado)
+
+```bash
+docker compose up --build
+```
+
+Abrir [http://localhost:5173](http://localhost:5173). La API queda en `http://localhost:8001/api`.
+
+### Sin Docker
+
+#### Backend
 
 ```bash
 cd backend
@@ -53,7 +68,7 @@ pip install -r requirements.txt
 uvicorn app.main:app --port 8000
 ```
 
-### Frontend
+#### Frontend
 
 ```bash
 cd frontend
@@ -61,7 +76,7 @@ npm install
 npm run dev
 ```
 
-Abrir [http://localhost:5173](http://localhost:5173). La API queda en `http://localhost:8000/api`.
+Abrir [http://localhost:5173](http://localhost:5173). La API queda en `http://localhost:8001/api`.
 
 ## Uso
 
