@@ -14,7 +14,7 @@ CAMPOS_BASE_CSV = [
     "numero_dividendo", "tipo_sociedad", "valor_historico",
 ]
 LLAVE_CAMPOS = [
-    "ejercicio", "mercado", "instrumento", "fecha", "secuencia",
+    "ejercicio", "mercado", "instrumento", "fecha_pago", "secuencia",
     "numero_dividendo", "tipo_sociedad",
 ]
 
@@ -45,6 +45,14 @@ def validar_suma_factores(factores: dict[int, float]) -> None:
         )
 
 
+def _validar_tipo_sociedad(valor: str) -> str:
+    """Tipo sociedad: solo 'A' (Abierta) o 'C' (Cerrada), segun hoja 3.1 del HDU."""
+    v = str(valor).strip().upper()
+    if v not in ("A", "C"):
+        raise ValueError(f"Tipo sociedad debe ser A o C, se recibió: {valor!r}")
+    return v
+
+
 def normalizar_fecha(valor: str) -> str:
     """Acepta '2023-12-12', '12-12-2023', '2023-12-12 00:00:00' -> ISO YYYY-MM-DD."""
     v = valor.strip()
@@ -57,8 +65,11 @@ def normalizar_fecha(valor: str) -> str:
 
 
 def mapear_fila_csv(fila: dict) -> dict:
-    """Mapea una fila del CSV (encabezados de la hoja 3.1) a los campos del modelo."""
-    fecha = normalizar_fecha(str(fila.get("fecha", "")))
+    """Mapea una fila del CSV (encabezados de la hoja 3.1) a los campos del modelo.
+
+    Acepta encabezado 'fecha' (CSV cliente) o 'fecha_pago' (modelo/BD).
+    """
+    fecha = normalizar_fecha(str(fila.get("fecha_pago") or fila.get("fecha", "")))
     montos = {}
     for c in COLUMNAS_MONTOS:
         k = f"monto_{c}"
@@ -71,10 +82,10 @@ def mapear_fila_csv(fila: dict) -> dict:
         "ejercicio": int(fila["ejercicio"]),
         "mercado": str(fila["mercado"]).strip(),
         "instrumento": str(fila["instrumento"]).strip(),
-        "fecha": fecha,
+        "fecha_pago": fecha,
         "secuencia": int(fila["secuencia"]),
         "numero_dividendo": int(fila["numero_dividendo"]),
-        "tipo_sociedad": str(fila["tipo_sociedad"]).strip().upper(),
+        "tipo_sociedad": _validar_tipo_sociedad(fila.get("tipo_sociedad", "")),
         "valor_historico": float(fila.get("valor_historico", 0.0) or 0.0),
         "isfut": 1 if str(fila.get("isfut", "")).strip().upper() in ("1", "TRUE", "S", "SI", "X") else 0,
         "montos": montos,

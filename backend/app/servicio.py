@@ -49,18 +49,18 @@ def _insertar_calificacion(conn, data: dict, fuente: str) -> int:
            (ejercicio, mercado, instrumento, fecha_pago, secuencia,
             numero_dividendo, tipo_sociedad, valor_historico, isfut, origen, fuente)
            VALUES (?,?,?,?,?,?,?,?,?,?,?)""",
-        (data["ejercicio"], data["mercado"], data["instrumento"], data["fecha"],
+        (data["ejercicio"], data["mercado"], data["instrumento"], data["fecha_pago"],
          data["secuencia"], data["numero_dividendo"], data["tipo_sociedad"],
          data["valor_historico"], data.get("isfut", 0), data.get("origen", "corredor"),
          fuente),
     )
     rid = cur.lastrowid
     for c in reglas.COLUMNAS_MONTOS:
-        if c in data.get("montos", {}):
+        if c in (data.get("montos") or {}):
             conn.execute("INSERT OR REPLACE INTO montos VALUES (?,?,?)",
                          (rid, c, data["montos"][c]))
     for c in reglas.COLUMNAS_FACTORES:
-        if c in data.get("factores", {}):
+        if c in (data.get("factores") or {}):
             conn.execute("INSERT OR REPLACE INTO factores VALUES (?,?,?)",
                          (rid, c, data["factores"][c]))
     return rid
@@ -75,6 +75,8 @@ def crear_calificacion(data: dict, fuente: str = "manual") -> dict:
         reglas.validar_suma_factores(factores)
     if factores:
         reglas.validar_suma_factores(factores)
+    if factores is not None:
+        data["factores"] = factores  # inyecta para que _insertar los persista
     with get_conn() as conn:
         rid = _insertar_calificacion(conn, data, fuente)
         audit(conn, "INSERT", rid, f"{data['mercado']} {data['instrumento']} ej{data['ejercicio']}")
