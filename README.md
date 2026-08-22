@@ -70,6 +70,24 @@ Abrir [http://localhost:5173](http://localhost:5173). La API queda en `http://lo
 3. **Cargar CSV**: subir archivo con montos o factores; los registros existentes se actualizan por llave (ejercicio + mercado + instrumento + fecha + secuencia + dividendo + tipo sociedad).
 4. **Auditoría**: pestaña con el log de todas las operaciones.
 
+## Glosario tributario
+
+| Término | Qué significa |
+|---------|---------------|
+| Calificación tributaria | Clasificación de los dividendos según su tratamiento tributario (cómo se gravan) |
+| Factor | Proporción (entre 0 y 1) que representa cada categoría tributaria sobre el total de montos |
+| Monto | Valor en pesos de cada categoría, según el certificado que envía la empresa |
+| DJ 1948 / DJ 1922 | Declaraciones Juradas que los emisores presentan al SII con la información de dividendos |
+| Certificado 70 | Certificado del SII que detalla la situación tributaria de los dividendos de una empresa |
+| SII | Servicio de Impuestos Internos de Chile |
+| ISFUT | Impuesto Sustitutivo al FUT: utilidades que pagan un impuesto único en vez de los impuestos finales |
+| IDPC | Impuesto de Primera Categoría: impuesto que pagan las empresas sobre sus utilidades |
+| IGC | Impuesto Global Complementario: impuesto progresivo que pagan las personas |
+| FUT | Fondo de Utilidades Tributables: registro histórico de utilidades de una empresa |
+| Llave de negocio | Combinación de campos (ejercicio + mercado + instrumento + fecha + secuencia + dividendo + tipo sociedad) que identifica un registro de forma única; se usa para actualizar en la carga masiva |
+| Corredor de bolsa | Intermediario que compra y vende valores por cuenta de sus clientes |
+| nuam | Holding que integra las bolsas de Santiago, Lima y Colombia |
+
 ## Estructura del proyecto
 
 ```
